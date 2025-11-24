@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Kingdee.Function;
@@ -27,6 +28,7 @@ public class HttpTrigger
     {
         try
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             YXKClient client = new YXKClient();
             string result = await client.Query(req);
             return new OkObjectResult(result);
