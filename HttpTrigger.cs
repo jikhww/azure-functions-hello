@@ -24,10 +24,16 @@ public class HttpTrigger
 
     [Function("KingdeeQuery")]
     public async Task<IActionResult> Query([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
-    { 
-        YXKClient client = new YXKClient();
-        string result = await client.Query(req);
-        return new OkObjectResult(result);
+    {
+        try
+        {
+            YXKClient client = new YXKClient();
+            string result = await client.Query(req);
+            return new OkObjectResult(result);
+        }
+        catch (Exception ex) {
+            return new OkObjectResult(ex.ToString());
+        }
     }
 
 }
