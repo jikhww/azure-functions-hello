@@ -1,5 +1,6 @@
 using Kingdee.CDP.WebApi.SDK;
 using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace Kingdee.Function;
 
@@ -25,7 +26,7 @@ public class YXKClient
         }
     }
     private string InternalQuery(YXKApiConfig config, QueryBody body)
-    {
+    {        
         var client = CreateClient(config);
         var bodyStr = System.Text.Json.JsonSerializer.Serialize(body);
         return client.BillQuery(bodyStr);
