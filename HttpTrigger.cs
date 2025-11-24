@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Kingdee.Function;
 
@@ -20,4 +21,13 @@ public class HttpTrigger
         _logger.LogInformation("C# HTTP trigger function processed a request.");
         return new OkObjectResult("Welcome to Azure Functions!");
     }
+
+    [Function("KingdeeQuery")]
+    public async Task<IActionResult> Query([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
+    { 
+        YXKClient client = new YXKClient();
+        string result = await client.Query(req);
+        return new OkObjectResult(result);
+    }
+
 }
