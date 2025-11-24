@@ -3,7 +3,7 @@
     "azure_functions": {
       "commandName": "Project",
       "commandLineArgs": "--port 7077",
-      "launchBrowser": false
+      "nativeDebugging": true
     }
   }
 }
