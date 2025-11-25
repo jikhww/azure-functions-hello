@@ -30,8 +30,7 @@ public class HttpTrigger
     public async Task<IActionResult> Query([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
     {
         try
-        {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+        {            
             YXKClient client = new YXKClient();
             string result = await client.Query(req);
             return new OkObjectResult(result);
