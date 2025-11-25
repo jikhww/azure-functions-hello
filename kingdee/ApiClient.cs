@@ -33,15 +33,7 @@ namespace Kingdee.CDP.WebApi.SDK
             {
                 if (m_defaultTimeOut == 0)
                 {
-                    string value = ApiSettingsHelper.GetSection("X-KDApi-TimeOut").Value;
-                    if (!string.IsNullOrWhiteSpace(value))
-                    {
-                        m_defaultTimeOut = int.Parse(value);
-                    }
-                    else
-                    {
-                        m_defaultTimeOut = 300000;
-                    }
+                    m_defaultTimeOut = 300000;
                 }
 
                 return m_defaultTimeOut;
@@ -54,16 +46,6 @@ namespace Kingdee.CDP.WebApi.SDK
 
         protected string GetServerUrl()
         {
-            string value = ApiSettingsHelper.GetSection("X-KDApi-ServerUrl").Value;
-            if (value != null)
-            {
-                if (!value.EndsWith("/"))
-                {
-                    return value + "/";
-                }
-
-                return value;
-            }
 
             throw new ArgumentException("ServerUrl is required for ApiClient!");
         }
@@ -84,7 +66,6 @@ namespace Kingdee.CDP.WebApi.SDK
             this.serverUrl = (serverUrl.EndsWith("/") ? serverUrl : (serverUrl + "/"));
             CookieContainer = new CookieContainer();
             httpClient = new HttpClient();
-            LoadConfig(httpClient);
         }
 
         public ApiClient(ThirdPassPortInfo authInfo, int timeout)
@@ -129,46 +110,6 @@ namespace Kingdee.CDP.WebApi.SDK
         public string GetSessionId()
         {
             return httpClient.GetSessionId();
-        }
-
-        private void LoadConfig(HttpClient client)
-        {
-            string value = ApiSettingsHelper.GetSection("X-KDApi-AppID").Value;
-            StringBuilder stringBuilder = new StringBuilder();
-            if (!string.IsNullOrWhiteSpace(value))
-            {
-                string value2 = ApiSettingsHelper.GetSection("X-KDApi-AppSec").Value;
-                string value3 = ApiSettingsHelper.GetSection("X-KDApi-UserName").Value;
-                string value4 = ApiSettingsHelper.GetSection("X-KDApi-AcctID").Value;
-                string text = ApiSettingsHelper.GetSection("X-KDApi-LCID").Value;
-                string value5 = ApiSettingsHelper.GetSection("X-KDApi-OrgNum").Value;
-                if (string.IsNullOrWhiteSpace(value2))
-                {
-                    stringBuilder.AppendLine("X-KDApi-AppSec is required for ApiClient!");
-                }
-
-                if (string.IsNullOrWhiteSpace(value3))
-                {
-                    stringBuilder.AppendLine("X-KDApi-UserName is required for ApiClient!");
-                }
-
-                if (string.IsNullOrWhiteSpace(value4))
-                {
-                    stringBuilder.AppendLine("X-KDApi-AcctID is required for ApiClient!");
-                }
-
-                if (string.IsNullOrWhiteSpace(text))
-                {
-                    text = "2052";
-                }
-
-                if (stringBuilder.Length != 0)
-                {
-                    throw new ArgumentException(stringBuilder.ToString());
-                }
-
-                client.InitAuthInfo(value4, value, value2, value3, int.Parse(text), value5);
-            }
         }
 
         public void InitClient(string acctID, string appID, string appSec, string userName, int lcid = 2052, string orgNum = null, string serverUrl = null)
